@@ -15,6 +15,7 @@ from aiohttp import web
 # 注意logging模块中可能会有部分Message，不要随意改写Format
 logging.basicConfig(level=logging.INFO)
 
+# async/await 使用协程，编写异步应用的推荐方式
 async def index(request):
     # Add content_type
     return web.Response(body='<h1>zero\'s Blog</h1>'.encode('utf-8'), content_type='text/html')
