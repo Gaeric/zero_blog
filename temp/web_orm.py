@@ -86,117 +86,44 @@ async def execute(sql, args):
 # 为了便于复用，于是定义出的通用的Model
 
 # 预设orm及调用方法
-from orm import Model, StringField, IntegerField
-
-class User(Model):
-    __table__ = 'users'
-    # 表名为users，其中有两个字段
-    # 第一个字段为id，自增id，字段的属性为integer
-    # 第二个字段为name，是用户名，字段属性为string
-    id = IntegerField(primary=True)
-    name = StringField()
-
-# 其调用方法如下：
-# 创建实例
-user = User(id=2, name='zero')
-# 插入数据库
-user.insert()
-# 查询所有User对象
-users=User.findAll()
+# from orm import Model, StringField, IntegerField
+#
+# class User(Model):
+#     __table__ = 'users'
+#     # 表名为users，其中有两个字段
+#     # 第一个字段为id，自增id，字段的属性为integer
+#     # 第二个字段为name，是用户名，字段属性为string
+#     id = IntegerField(primary=True)
+#     name = StringField()
+#
+# # 其调用方法如下：
+# # 创建实例
+# user = User(id=2, name='zero')
+# # 插入数据库
+# user.insert()
+# # 查询所有User对象
+# users=User.findAll()
 
 # 实际定义orm
-# 基类Model
-class Model(dict, metaclass=ModelMetaclass):
-    def __init__(self, **kw):
-        super(Model, self).__init__(**kw)
 
-    def __getattr__(self, key):
-        try:
-            return self[key]
-        except KeyError:
-            raise AttributeError(r"'Model' object has no attribute '%s'" % key)
-
-    def __setattr__(self, key, value):
-        self[key] = value
-
-    def getValue(self, key):
-        return getattr(self, key, None)
-
-    def getValueOrDefault(self, key):
-        value = getattr(self, key, None)
-        if value is None:
-            field = self.__mappings__[key]
-            if filed.deafult is not None:
-                value = field.default() if callable(field.default) else field.default
-                logging.debug('using default value for %s:%s' % (key, str(value)))
-                setattr(self, key, value)
-        return value
-
-class Field(object):
-    def __init__(self, name, column_type, primary_key, default):
-        self.name = name
-        self.column_type = column_type
-        self.primary_key = primary_key
-        self.default = default
-
-    def __str__(self):
-        return '<%s, %s:%s>' % (self.__class__.__name__, self.column_type, self.name)
-
-class StringField(Field):
-    def __init__(self, name=None, primary_key=False, default=None, ddl='varchar(100)'):
-        super().__init__(name, ddl, primary_key, default)
-
-
-class ModelMetaclass(type):
-    # __new__是创建一个实例的方法，在实例创建时调用
-    def __new__(cls, name, bases, attrs):
-        if name == 'Model':
-            return type.__new__(cls, name, bases, attrs)
-        typeName = attrs.get('__table__', None) or name
-        logging.info('found model: %s (table: %s)' % (name, typeName))
-
-        mapping = dict()
-        fields = []
-        primaryKey = None
-        for k, v in attrs.items():
-            if isinstance(v, Field):
-                logging.info('   found mapping: %s ==> %s' % (k, v))
-                mappings[k] = v
-                if v.primary_key:
-                    if primaryKey:
-                        raise RuntimeError('Duplicate primary key for field: %s' % k)
-                    primaryKey = k
-                else:
-                    fields.append(k)
-
-        if not primaryKey:
-            raise RuntimeError('Primary key not found.')
-        for k in mapping.keys():
-            attrs.pop(k)
-        escaped_fields = list(map(lambda f: '`%s`' % f, fields))
-        attrs['__mappings__'] = mappings
-        attrs['__table__'] = tableName
-        attrs['__primary_key__'] = primaryKey
-        attrs['__fields__'] = fields
-
-# 则，根据我们对orm的设想，User的定义和调用如下：
+# 根据我们对orm的设想，User的定义和调用如下：
 # 导入Model做为User的基类，StringField和IntegerField定义字段的属性
-from orm import Model, StringField, IntegerField
-
-# 首先User继承自Model
-class User(Model):
-    # 对应的数据库表为users表
-    __talbe__ = 'users'
-    # 第一个字段为id，属性为整型， 且其为主键
-    id = IntegerField(primary=True)
-    # 第二个字段为name，属性为字符串型
-    name = StringField()
-
-# 其使用方法如下：
-user = User(id=2, name='zero')
-# 插入和查询对所有表通用，则定义在Model中
-user.insert()
-users=User.findAll()
+# comment from orm import Model, StringField, IntegerField
+# comment
+# comment # 首先User继承自Model
+# comment class User(Model):
+# comment     # 对应的数据库表为users表
+# comment     __talbe__ = 'users'
+# comment     # 第一个字段为id，属性为整型， 且其为主键
+# comment     id = IntegerField(primary_key=True)
+# comment     # 第二个字段为name，属性为字符串型
+# comment     name = StringField()
+# comment
+# comment # 其使用方法如下：
+# comment user = User(id=2, name='zero')
+# comment # 插入和查询对所有表通用，则定义在Model中
+# comment user.insert()
+# comment users=User.findAll()
 
 # 首先定义Field
 # 类可以起到模板的作用，使用__init__方法将部分属性强制绑定
@@ -208,7 +135,6 @@ class Field(object):
         self.column_type = column_type
         self.primary_key = primary_key
         self.default = default
-
     def __str__(self):
         return '<%s, %s:%s>' % (self.__class__.__name__, self.column_type, self.name)
 
@@ -218,19 +144,19 @@ class Field(object):
 # 诸如：StringField BooleanField IntegerField FloatField TextField
 # 默认参数的定义和使用，及其注意事项
 class StringField(Field):
-    def __init__(self, name=None, primary_key=False, defalut=None, ddl='varchar(100)'):
+    def __init__(self, name=None, primary_key=False, default=None, ddl='varchar(100)'):
         super().__init__(name, ddl, primary_key, default)
 
 class IntegerField(Field):
     def __init__(self, name=None, primary_key=False, default=0):
-        super().__init(name, 'bigint', primary_key, default)
+        super().__init__(name, 'bigint', primary_key, default)
 
 class FloatField(Field):
-    def __init__(self, name=None, primary_key=False, defalut=0):
+    def __init__(self, name=None, primary_key=False, defalut=0.0):
         super().__init__(name, 'real', primary_key, defalut)
 
 class TextField(Field):
-    def __init__(self, name=None, default):
+    def __init__(self, name=None, default=None):
         super().__init__(name, 'text', False, default)
 
 # boolean不可能是主键
@@ -251,7 +177,7 @@ class ModelMetaclass(type):
 
         mappings = dict()
         fields = []
-        primaryKey = None:
+        primaryKey = None
         for k, v in attrs.items():
             if isinstance(v, Field):
                 # 已存在的映射关系
@@ -278,7 +204,7 @@ class ModelMetaclass(type):
         attrs['__fields__'] = fields
         attrs['__select__'] = 'select `%s`, %s from `%s`' % (primaryKey, ','.join(escaped_fields), tableName)
         attrs['__insert__'] = 'insert into `%s` (%s, `%s`) values (%s)' % (tableName, ','.join(escaped_fields), primaryKey, create_args_string(len(escaped_fields) + 1))
-        attrs['__update__'] = 'update `%s` set %s where `%s`=?' % (tableName, ','.join(map(lambda f: '`s`=?' % (mappings.get(f).name or f), fields)), primaryKey)
+        attrs['__update__'] = 'update `%s` set %s where `%s`=?' % (tableName, ','.join(map(lambda f: '`%s`=?' % (mappings.get(f).name or f), fields)), primaryKey)
         attrs['__delete__'] = 'delete from `%s` where `%s`=?' % (tableName, primaryKey)
         return type.__new__(cls, name, bases, attrs)
 
@@ -305,7 +231,7 @@ class Model(dict, metaclass=ModelMetaclass):
             field = self.__mappings__[key]
             if field.default is not None:
                 value = field.default() if callable(field.default) else field.default
-                logging.debug('usign defalut value for %s: %s' 5 (key, str(value)))
+                logging.debug('usign defalut value for %s: %s' % (key, str(value)))
                 setattr(self, key, value)
         return value
 
@@ -318,9 +244,71 @@ class Model(dict, metaclass=ModelMetaclass):
         # conn.cursor(aiomysql.DictCursor)返回结果为字典
         return cls(**rs[0])
 
+    @classmethod
+    async def findAll(cls, where=None, args=None, **kw):
+        '''Find objects by where clause.'''
+        sql = [cls.__select__]
+        if where:
+            sql.append('where')
+            sql.append(where)
+        if args is None:
+            args = []
+        orderBy = kw.get('orderBy', None)
+        if orderBy:
+            sql.append('order by')
+            sql.append(orderBy)
+        limit = kw.get('limit', None)
+        if limit is not None:
+            sql.append('limit')
+            if isinstance(limit, int):
+                sql.append('?')
+                args.append(limit)
+            elif isinstance(limit, tuple) and len(limit) == 2:
+                sql.append("?, ?")
+                args.extend(limit)
+            else:
+                raise ValueError('Invalid limit value: %s' % str(limit))
+        rs = await select(' '.join(sql), args)
+        return [cls(**r) for r in rs]
+
+    @classmethod
+    async def findNumber(cls, selectField, where=None, args=None):
+        '''find number by select and where'''
+        sql = ['select %s _num_ from `%s`' % (selectField, cls.__table__)]
+        if where:
+            sql.append('where')
+            args.append(where)
+        rs = await select(' '.join(sql), args, 1)
+        if len(rs) == 0:
+            return None
+        return rs[0]['_num_']
+
+    # 因为我们从创建了orm，每个User的实例都对应着sql中的一行数据，
+    # 如果要增加、删除或修改这条数据，只需要对这个实例进行操作即可，方法的对系为user这个实例
+    # 但如果要进行查询，则必须对这个库中的内容进行搜索，方法的对象为User这个class
+
     async def save(self):
         args = list(map(self.getValueOfDefault, self.__fields__))
         args.append(self.getValueOfDefault(self.__primary_key__))
         rows = await execute(self.__insert__, args)
         if rows != 1:
             logging.warn('failed to insert record: affected rows: %s' % rows)
+
+    async def update(self):
+        args = list(map(self.getValue, self.__fields__))
+        args.append(self.getValue(self.__primary_key__))
+        rows = await execute(self.__update__, args)
+        if rows != 1:
+            logging.warn('failed to update by primary key: affected rows: %s' % rows)
+
+    async def remove(self):
+        args = [self.getValue(self.__primary_key__)]
+        rows = await execute(self.__delete__, args)
+        if rows != 1:
+            logging.warn('failed to remove by primary key: affected rows: %s' % rows)
+
+def create_args_string(num):
+    L = []
+    for n in range(num):
+        L.append('?')
+    return ', '.join(L)
