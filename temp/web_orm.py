@@ -11,6 +11,7 @@ import logging
 import json
 import asyncio
 from aiohttp import web
+import aiomysql
 
 logging.basicConfig(level=logging.INFO)
 
@@ -21,15 +22,15 @@ async def create_pool(loop, **kw):
     __pool = await aiomysql.create_pool(
         host=kw.get('host', 'localhost'),
         port=kw.get('prot', 3306),
-        # user=kw['root'],
+        password=kw['password'], # 竟然忘了获取密码
         user=kw.get('user', 'root'),
         db=kw.get('db', 'db'),
         charset=kw.get('charset', 'utf8'),
         autocommit=kw.get('autocommit', True),
         maxsize=kw.get('maxsize', 10),
         minsize=kw.get('minsize', 1),
-        loop=loop
-    )
+        loop=loop)
+
 
 # 数据库 select 函数，从连接池中获取连接并查询内容
 # 成功返回查询结果集 rs 并关闭 cursor
@@ -152,8 +153,8 @@ class IntegerField(Field):
         super().__init__(name, 'bigint', primary_key, default)
 
 class FloatField(Field):
-    def __init__(self, name=None, primary_key=False, defalut=0.0):
-        super().__init__(name, 'real', primary_key, defalut)
+    def __init__(self, name=None, primary_key=False, default=0.0):
+        super().__init__(name, 'real', primary_key, default)
 
 class TextField(Field):
     def __init__(self, name=None, default=None):
