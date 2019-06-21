@@ -151,11 +151,15 @@ def log(text):
 
 # 但是它还有一个问题：
 # 因为调用的实际不是原来的函数，bar的元信息发生了变化，Python内置的functools.wraps解决这个问题
+
+# >>> bar.__name__
+# 'wrapper'
+# >>>
 import functools
 
 def log(func):
     # 任意参数
-    @functools.wraps # 将func的信息传递给了被装饰的wrapper
+    @functools.wraps(func) # 将func的信息传递给了被装饰的wrapper
     def wrapper(*args, **kw):
         print('%s is running' % func.__name__)
         return func(*args, **kw)
@@ -163,20 +167,22 @@ def log(func):
 
 def log(text):
     def decorator(func):
-        @functools.wraps # 因为最后取代func运行的实际是wrapper，故在这里装饰
+        @functools.wraps(func) # 因为最后取代func运行的实际是wrapper，故在这里装饰
         def wrapper(*args, **kw):
             print("%s: %s is running" % (text, func.__name__))
             return func(*args, **kw)
         return wrapper
     return decorator
 
+@log
+def bar(name):
+    print("hello, %s" % name)
 
+# >>> bar('zero')
+# bar is running
+# hello, zero
 # >>> bar.__name__
-# 'wrapper'
-# >>>
-
-
-
+# 'bar'
 
 # @ 语法糖不用解释
 # 在定义函数bar时 @ 装饰函数即可
