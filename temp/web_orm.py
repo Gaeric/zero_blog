@@ -35,8 +35,7 @@ async def create_pool(loop, **kw):
 # 数据库 select 函数，从连接池中获取连接并查询内容
 # 成功返回查询结果集 rs 并关闭 cursor
 async def select(sql, args, size=None):
-    #TODO 不清楚作用的语句注释保留，查明后删除或批注
-    # log(sql, args)
+    log(sql, args)              # 这里是增加日志
     global __pool
     with (await __pool) as conn:
         # conn 和 cursor是pymysql的标准用法
