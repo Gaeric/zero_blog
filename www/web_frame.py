@@ -62,7 +62,7 @@ def has_var_kw_arg(fn):
             return True
 
 def has_request_arg(fn):
-    sig = inspect.Signature(fn)
+    sig = inspect.signature(fn)
     params = sig.parameters
     found = False
     for name, param in params.items():
@@ -71,6 +71,7 @@ def has_request_arg(fn):
             continue
         if found and (param.kind != inspect.Parameter.VAR_POSITIONAL and param.kind != inspect.Parameter.KEYWORD_ONLY and param.kind != inspect.Parameter.VAR_KEYWORD):
             raise ValueError('request parameter must be the last named parameter in function: %s%s' % (fn.__name__, str(sig)))
+    return found
 
 
 class RequestHandler(object):
@@ -91,12 +92,12 @@ class RequestHandler(object):
                 if not request.content_type:
                     return web.HTTPBadRequest('Missing Content-Type.')
                 ct = request.content_type.lower()
-                if ct.startwith('application/json'):
+                if ct.startswith('application/json'):
                     params = await request.json()
                     if not isinstance(params, dict):
                         return web.HTTPBadRequest('JSON body must be object.')
                     kw = params
-                elif ct.startwith('application/x-www-from-urlencode') or startwith('multipart/form-data'):
+                elif ct.startswith('application/x-www-form-urlencoded') or ct.startswith('multipart/form-data'):
                     params = await request.post()
                     kw = dict(**params)
                 else:
@@ -107,10 +108,10 @@ class RequestHandler(object):
                     kw = dict()
                     for k, v in parse.parse_qs(qs, True).items():
                         kw[k] = v[0]
-        if  kw is None:
+        if kw is None:
             kw = dict(**request.match_info)
         else:
-            if not self._has_var_kw_arg and self._name_kw_args:
+            if not self._has_var_kw_arg and self._named_kw_args:
                 # remove all unamed kw:
                 copy = dict()
                 for name in self._named_kw_args:
@@ -122,7 +123,6 @@ class RequestHandler(object):
                 if k in kw:
                     logging.warning('Duplicate arg name in named arg and kw args: %s' % k)
                 kw[k] = v
-
         if self._has_request_arg:
             kw['request'] = request
         # check required kw:
@@ -134,8 +134,62 @@ class RequestHandler(object):
         try:
             r = await self._func(**kw)
             return r
-        except APIError as err:
-            return dict(error=err.error, data=er.data, message=err.message)
+        except APIError as e:
+            return dict(error=e.error, data=e.data, message=e.message)
+
+    # async def __call__(self, request):
+    #     logging.debug("%s is Called!" % __name__)
+    #     kw = None
+    #     if self._has_var_kw_arg or self._has_named_kw_args or self._required_kw_args:
+    #         if request.method == 'POST':
+    #             if not request.content_type:
+    #                 return web.HTTPBadRequest('Missing Content-Type.')
+    #             ct = request.content_type.lower()
+    #             if ct.startwith('application/json'):
+    #                 params = await request.json()
+    #                 if not isinstance(params, dict):
+    #                     return web.HTTPBadRequest('JSON body must be object.')
+    #                 kw = params
+    #             elif ct.startwith('application/x-www-from-urlencode') or startwith('multipart/form-data'):
+    #                 params = await request.post()
+    #                 kw = dict(**params)
+    #             else:
+    #                 return web.HTTPBadRequest('Unsupported Content-Type: %s' % request.content_type)
+    #         if request.method == 'GET':
+    #             qs = request.query_string
+    #             if qs:
+    #                 kw = dict()
+    #                 for k, v in parse.parse_qs(qs, True).items():
+    #                     kw[k] = v[0]
+    #     if  kw is None:
+    #         kw = dict(**request.match_info)
+    #     else:
+    #         if not self._has_var_kw_arg and self._name_kw_args:
+    #             # remove all unamed kw:
+    #             copy = dict()
+    #             for name in self._named_kw_args:
+    #                 if name in kw:
+    #                     copy[name] = kw[name]
+    #             kw = copy
+    #         # check named arg:
+    #         for k, v in request.match_info.items():
+    #             if k in kw:
+    #                 logging.warning('Duplicate arg name in named arg and kw args: %s' % k)
+    #             kw[k] = v
+
+    #     if self._has_request_arg:
+    #         kw['request'] = request
+    #     # check required kw:
+    #     if self._required_kw_args:
+    #         for name in self._required_kw_args:
+    #             if not name in kw:
+    #                 return web.HTTPBadRequest('Missing argument: %s' % name)
+    #     logging.info('call with args: %s' % str(kw))
+    #     try:
+    #         r = await self._func(**kw)
+    #         return r
+    #     except APIError as err:
+    #         return dict(error=err.error, data=er.data, message=err.message)
 
 
 def add_static(app):
@@ -146,11 +200,15 @@ def add_static(app):
 def add_route(app, fn):
     method = getattr(fn, '__method__', None)
     path = getattr(fn, '__route__', None)
+    logging.debug("method: %s fn: %s and route: %s" % (method, fn.__name__, path))
     if path is None or method is None:
         raise ValueError('@get or @post not defined is %s.' % str(fn))
     if not asyncio.iscoroutinefunction(fn) and not inspect.isgeneratorfunction(fn):
         fn = asyncio.coroutine(fn)
-    logging.info('add route %s %s => %s(%s)' % (method, path, fn.__name__, ', '.join(inspect.signature(fn).parameters.key())))
+        logging.debug('Create coroutine [fn]')
+    # TODO: Some error: 'mappingproxy' object has no attribute 'key'
+    # logging.info('add route %s %s => %s(%s)' % (method, path, fn.__name__, ', '.join(inspect.signature(fn).parameters.key())))
+    logging.info('add route %s %s => %s(%s)' % (method, path, fn.__name__, ', '.join(inspect.signature(fn).parameters)))
     app.router.add_route(method, path, RequestHandler(app, fn))
 
 def add_routes(app, module_name):
@@ -160,8 +218,9 @@ def add_routes(app, module_name):
     else:
         name = module_name[n+1:]
         mod = getattr(__import__(module_name[:n], globals(), locals(), [name]), name)
+    logging.info("mod at add_routes:%s" % mod)
     for attr in dir(mod):
-        if attr.startwith('_'):
+        if attr.startswith('_'):
             continue
         fn = getattr(mod, attr)
         if callable(fn):
