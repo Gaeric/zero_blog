@@ -14,10 +14,11 @@ import time
 
 from datetime import datetime
 from aiohttp import web
-
-from web_frame import add_routes
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
+
+from web_frame import add_routes
+import orm
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -105,6 +106,8 @@ async def response_factory(app, handler):
 # 然后导入路由和URL处理函数，对请求进行响应
 
 async def init():
+    "Init Async Server"
+    await orm.create_pool(host='127.0.0.1', port=3306, user='zero_blog', password='zero_blog', db='zero_blog')
     "Build web app"
     app = web.Application(middlewares=[
         logger_factory, response_factory
