@@ -5,6 +5,7 @@ import asyncio
 # import aiomysql
 
 import web_orm
+import logging
 from models import User, Blog, Comment
 
 async def test(loop):
@@ -25,6 +26,16 @@ async def test_example(loop):
         loop=loop
     )
 
+async def find_all(loop):
+    await web_orm.create_pool(user='root', password='lantian123', db='zero_blog', loop=loop)
+
+    # u = User(name='nobody', email='nobody@example.com', passwd='nobody', image='about:nobody')
+    # await u.save()
+
+    users = await User.findAll()
+    logging.info("Users: %s" % users)
+
 loop = asyncio.get_event_loop()
 # loop.run_until_complete(test_example(loop))
-loop.run_until_complete(test(loop))
+# loop.run_until_complete(test(loop))
+loop.run_until_complete(find_all(loop))

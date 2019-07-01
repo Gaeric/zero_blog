@@ -1,4 +1,5 @@
 #+title: 个人博客
+#+HTML_HEAD: <link href="./worg.css" rel="stylesheet" type="text/css">
 学习python，搭建个人博客作为实战项目
 * 要求
   1. 依据廖雪峰的python3教程，完成功能

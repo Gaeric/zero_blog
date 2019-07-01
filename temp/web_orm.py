@@ -35,11 +35,12 @@ async def create_pool(loop, **kw):
 # 数据库 select 函数，从连接池中获取连接并查询内容
 # 成功返回查询结果集 rs 并关闭 cursor
 async def select(sql, args, size=None):
-    log(sql, args)              # 这里是增加日志
+    # log(sql, args)              # 这里是增加日志
     global __pool
     with (await __pool) as conn:
         # conn 和 cursor是pymysql的标准用法
         cur = await conn.cursor(aiomysql.DictCursor)
+        await cur.execute(sql.replace('?', '%s'), args or ())
         if size:
             rs = await cur.fetchmany(size)
         else:
@@ -248,6 +249,7 @@ class Model(dict, metaclass=ModelMetaclass):
     async def findAll(cls, where=None, args=None, **kw):
         '''Find objects by where clause.'''
         sql = [cls.__select__]
+
         if where:
             sql.append('where')
             sql.append(where)
@@ -268,6 +270,7 @@ class Model(dict, metaclass=ModelMetaclass):
                 args.extend(limit)
             else:
                 raise ValueError('Invalid limit value: %s' % str(limit))
+
         rs = await select(' '.join(sql), args)
         return [cls(**r) for r in rs]
 
