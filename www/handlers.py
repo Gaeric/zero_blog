@@ -45,3 +45,11 @@ def blog(request):
         '__template__': 'blogs.html',
         'blogs': blogs
     }
+
+@get('/api/users')
+async def api_get_users():
+    # 数据库和前面的models的定义中这个字段是create_at
+    users = await User.findAll(orderBy='create_at desc')
+    for u in users:
+        u.passwd = '******'
+    return dict(users=users)

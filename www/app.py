@@ -11,6 +11,7 @@ import logging
 import asyncio
 import os
 import time
+import json
 
 from datetime import datetime
 from aiohttp import web
@@ -81,7 +82,7 @@ async def response_factory(app, handler):
             template = r.get('__template__')
             logging.info(f'template is {template}')
             if template is None:
-                resp = web.Response(body=json.dumps(r, ensure_ascii=False, defalut=lambda o: o.__dict__).encode('utf-8'))
+                resp = web.Response(body=json.dumps(r, ensure_ascii=False, default=lambda o: o.__dict__).encode('utf-8'))
                 resp.content_type = 'application/json;charset=utf-8'
                 return resp
             else:
