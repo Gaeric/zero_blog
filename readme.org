@@ -29,3 +29,22 @@
    metaclass用于增强类的功能，通过自定义创建类的方法__new__，改变类的行为
    如此例中定义的ModelMetaclass，当基于Model生成子类时，子类将根据ModelMetaclass定
    义的__new__，创建__mapping__、__table__等属性，动态创建各种使用的Model
+** {}用于匹配指定次数时，中间一定不能带上空格
+   email的正则表达式：
+   #+begin_src python
+     email_regex = re.compile(r'''(
+     ^
+     ([a-zA-Z0-9._%+_]+) # username
+     (@)                 # symbol
+     ([a-zA-Z0-9-.]+)    # domain name
+     (\.[a-zA-Z]{2,4})    # 不能带空格 切记
+     $
+     )
+     ''', re.VERBOSE)
+   #+end_src
+** 数据库记陆的密码与登录
+   首先，后端拿到的初始密码即已经通过前端进行摘要，数据在由客户端传递至服务端时，用户密码已经经过了sha1摘要
+
+   服务端获取到用户注册时传递的passwd后，拼接用户 ~uid~ ~:~ ~passwd~ ，再次进行摘要，将摘要结果计入数据库中
+   
+   用户登陆时，服务端接收到用户传递的passwd，查找用户，取出uid，再次拼接为 ~uid~ ~:~ ~passwd~ ，进行摘要后与数据库密钥相比对，相同即登陆完成
