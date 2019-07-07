@@ -12,6 +12,7 @@ import logging
 import re
 import hashlib
 import json
+import os
 
 from aiohttp import web
 
@@ -36,7 +37,7 @@ def user2cookie(user, max_age):
     return '-'.join(L)
 
 @get('/')
-async def index(request):
+async def index():
     # Test the server work well.
     # users = await User.findAll()
     # users = [{'id': '00156096303815290984ac46eb14ee9b526236bebe527a7000', 'email': 'test&example.com', 'passwd': '1234567890', 'admin': 0, 'name': 'Test', 'image': 'about:blank', 'create_at': 1560963038.15254}, {'id': '001561392888624d59a85c17c6043aa9b9d0187e4cedb2c000', 'email': 'nobody@example.com', 'passwd': 'nobody', 'admin': 0, 'name': 'nobody', 'image': 'about:nobody', 'create_at': 1561392888.62402}]
@@ -48,13 +49,13 @@ async def index(request):
     }
 
 @get('/blog/readme')
-async def readme(request):
+async def readme():
     return {
         '__template__': 'readme.html'
     }
 
 @get('/blog')
-def blog(request):
+def blog():
     summary = "Build world setp by setp"
     blogs = [
         Blog(id='1', name='Test Blog', summary=summary, created_at=time.time()-120),
@@ -66,6 +67,25 @@ def blog(request):
         '__template__': 'blogs.html',
         'blogs': blogs
     }
+
+@get('/org_blogs')
+def org_blogs():
+    #TODO: 更加安全且合理的读取文件列表的方法
+    blog_list = os.listdir('/webapp/www/static/org_blog/')
+    return {
+        # 'blog_name': blog_name,
+        'org_blogs': blog_list,
+        #TODO: 重排文件内容
+        '__template__': 'org_blogs.html'
+    }
+
+@get('/org_blogs/{blog}')
+def org_blog(blog):
+    return {
+        'blog_name': blog,
+        '__template__': 'org_blog_base.html'
+    }
+
 
 @get('/api/users')
 async def api_get_users():

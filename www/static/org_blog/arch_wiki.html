@@ -1,0 +1,756 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-07-08 Mon 00:44 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Arch手记</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="lantian" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link href="./worg.css" rel="stylesheet" type="text/css">
+<link href="/static/css/worg.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Arch手记</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org6c3d384">1. 基本流程</a></li>
+<li><a href="#org71ab549">2. 安装Arch双系统</a></li>
+<li><a href="#org42acf46">3. Arch安装配置Sway（基础环境）</a></li>
+<li><a href="#org37794c1">4. 基本开发环境搭建</a></li>
+<li><a href="#org2cd5835">5. 问题汇总</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org6c3d384" class="outline-2">
+<h2 id="org6c3d384"><span class="section-number-2">1</span> 基本流程</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<ol class="org-ol">
+<li><a id="org76143fb"></a>1. 安装步骤<br />
+<div class="outline-text-3" id="text-1-1">
+<p>
+遵循wiki上面的步骤，可顺利安装，本篇主要为Archlinux配置说明
+Arch wiki：<a href="https://wiki.archlinux.org/index.php/Installation_guide">https://wiki.archlinux.org/index.php/Installation_guide</a>
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="org0b452f2"></a>系统基础<br />
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+遵循wiki上面的步骤，可顺利安装
+<b>Please read Archwiki</b>
+</p>
+
+<p>
+注意理解fdisk分区命令中，对磁盘细节的划分
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="org427abb7"></a>启用网卡<br />
+<div class="outline-text-5" id="text-1-1-1-1">
+<p>
+archlinux安装后无法联网解决方法
+</p>
+
+<p>
+ip link '查看网卡名称，如enp4s0或eth0
+ip link set enp4s0 up '启动网卡
+dhcpcd enp4s0 '自动配置有线网络
+systemctl enable dhcpcd@enp4s0.service '配置开机启动有线网络
+完成！以后系统开机自动联网！
+</p>
+</div>
+</li>
+<li><a id="org555e05e"></a>安装引导<br />
+<div class="outline-text-5" id="text-1-1-1-2">
+<pre class="example">
+# grub-install --target=i386-pc /dev/sdX
+</pre>
+<p>
+where /dev/sdX is the disk where grub is to be installed (for example, disk /dev/sda and not partition /dev/sda1). 
+</p>
+</div>
+</li>
+</ol>
+</li>
+<li><a id="org15bef6b"></a>图形界面<br />
+<div class="outline-text-4" id="text-1-1-2">
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #5B6268;"># </span><span style="color: #5B6268;">&#20808;&#35201;&#23433;&#35013;&#30456;&#24212;&#30340;xorg&#31243;&#24207;&#38598;&#65292;&#20197;&#21450;&#30456;&#24212;&#30340;xorg-xinit&#31649;&#29702;&#22120;</span>
+pacman -S xorg xorg-xinit
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">&#28982;&#21518;&#23433;&#35013;i3&#31243;&#24207;&#21253;&#32452;</span>
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">&#20026;&#20102;&#27491;&#24120;&#20351;&#29992;&#65292;&#24448;&#24448;&#38656;&#35201;&#23433;&#35013;&#19968;&#20010;&#34394;&#25311;&#32456;&#31471;</span>
+pacman -S rxvt-unicode
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">&#31243;&#24207;&#32452;&#21015;&#34920;&#65306;https://www.archlinux.org/groups/</span>
+pacman -S i3
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org4f22214"></a>命令：fdisk<br />
+<div class="outline-text-4" id="text-1-1-3">
+<p>
+fdisk 进入交互界面：
+  n：新建分区
+  w：写入
+</p>
+</div>
+</li>
+<li><a id="orgd37b173"></a>中文化<br />
+<div class="outline-text-4" id="text-1-1-4">
+<p>
+<a href="https://wiki.archlinux.org/index.php/Localization/Simplified_Chinese_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">https://wiki.archlinux.org/index.php/Localization/Simplified_Chinese_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)</a>
+</p>
+
+<p>
+参见: <b>Archwiki</b>
+</p>
+</div>
+</li>
+</ol>
+</li>
+<li><a id="org2d925e2"></a>2. 安装基本的Xorg及Xorg-xinit<br />
+<div class="outline-text-3" id="text-1-2">
+<p>
+Arch wiki：<a href="https://wiki.archlinux.org/index.php/Xorg">https://wiki.archlinux.org/index.php/Xorg</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-shell" id="org6bd1f45">pacman -S xorg xorg-xinit
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org5516e40"></a>3. 安装并配置i3<br />
+<div class="outline-text-3" id="text-1-3">
+<p>
+Arch wiki：<a href="https://wiki.archlinux.org/index.php/I3">https://wiki.archlinux.org/index.php/I3</a>
+</p>
+</div>
+</li>
+<li><a id="orgb1f31f6"></a>4. 中文化设置<br />
+<div class="outline-text-3" id="text-1-4">
+<p>
+Arch wiki：<a href="https://wiki.archlinux.org/index.php/Localization">https://wiki.archlinux.org/index.php/Localization</a>
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="orge9545f3"></a>安装小小(yong)输入法<br />
+<div class="outline-text-4" id="text-1-4-1">
+<ul class="org-ul">
+<li>前置
+yong正常工作需要 GTK2 和 GTK3 环境，且唤醒快捷键会被Emacs阻拦</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-shell">wget http://ys-c.ys168.com/244626543/hVfHkVk4K465F3K6KM6/yong-lin-2.5.0-0.7z;
+
+<span style="color: #da8548; font-weight: bold;">7za</span> e &lt;archive name&gt;
+</pre>
+</div>
+<p>
+可能出现的问题：<a href="#org869b90f">安装过程中报错</a>
+</p>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div id="outline-container-org71ab549" class="outline-2">
+<h2 id="org71ab549"><span class="section-number-2">2</span> 安装Arch双系统</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<ol class="org-ol">
+<li><a id="org06f618b"></a>配置Grub引导<br />
+<div class="outline-text-3" id="text-2-1">
+<p>
+加其它启动项最好的方法是使用os-prober，挂载系统所在的启动分区，然后直接执行 grub-mkconfig 即可
+<del>加其他启动项的最好方法是编辑 /etc/grub.d/40<sub>custom</sub> 或 /boot/grub/custom.cfg.</del>
+然后运行如下命令，更新 <code>/boot/grub/custom.cfg</code>
+</p>
+<pre class="example">
+# grub-mkconfig -o /boot/grub/grub.cfg
+</pre>
+
+<p>
+参考ArchWiki: <a href="https://wiki.archlinux.org/index.php/GRUB">https://wiki.archlinux.org/index.php/GRUB</a>
+本地参考如下
+</p>
+<pre class="example">
+### BEGIN /etc/grub.d/30_os-prober ###
+menuentry 'Windows 7 (on /dev/sda1)' --class windows --class os $menuentry_id_option 'osprober-chain-78FC9A61FC9A1A08' {
+insmod part_msdos
+insmod ntfs
+set root='hd0,msdos1'
+if [ x$feature_platform_search_hint = xy ]; then
+search --no-floppy --fs-uuid --set=root --hint-ieee1275='ieee1275//disk@0,msdos1' --hint-bios=hd0,msdos1 --hint-efi=hd0,msdos1 --hint-baremetal=ahci0,msdos1  78FC9A61FC9A1A08
+else
+search --no-floppy --fs-uuid --set=root 78FC9A61FC9A1A08
+fi
+parttool ${root} hidden-
+chainloader +1
+}
+### END /etc/grub.d/30_os-prober ###
+</pre>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org42acf46" class="outline-2">
+<h2 id="org42acf46"><span class="section-number-2">3</span> Arch安装配置Sway（基础环境）</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+<code>Sway</code> 是一个基于 <code>wayland</code> 的窗口管理软件，它兼容 <code>i3</code> 的配置，可以看成 <code>i3</code> 的 <code>wayland</code> 实现
+尝试新技术，配置 <code>Arch+Sway</code> 的基础桌面环境
+首先安装了基本的 <code>Arch</code> ，并且安装了完整的 <code>base-devel</code> 和 <code>git</code>
+</p>
+
+<p>
+<code>Arch</code> 的官方仓库提供了完整的 <code>sway</code> ，但是它基于老旧的 <code>wlc</code> 和 <code>sway</code> ，所以我选择了AUR仓库中的 <code>wlroots-git</code> 和 <code>sway-git</code>
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="org77eded9"></a>从 <code>AUR</code> 安装 <code>wlroots-git</code> 和 <code>sway-git</code><br />
+<div class="outline-text-3" id="text-3-1">
+<p>
+首先找到 <code>Arch</code> 提供的 <code>AUR</code> 仓库
+分别为：
+<a href="https://aur.archlinux.org/sway-git.git">https://aur.archlinux.org/sway-git.git</a>
+<a href="https://aur.archlinux.org/wlroots-git.git">https://aur.archlinux.org/wlroots-git.git</a>
+</p>
+
+<p>
+由于是 <code>git</code> 仓库，直接使用 <code>git</code> 下载：
+</p>
+<pre class="example">
+git clone https://aur.archlinux.org/sway-git.git /tmp/sway
+git clone https://aur.archlinux.org/wlroots-git.git /tmp/wlroots
+</pre>
+<p>
+然后可以看到相应目录下的 <code>PKGBUILD</code>
+阅读发现没有什么难处，检查依赖并下载，然后安装
+</p>
+
+<p>
+直接 <code>makepkg -s PKGBUILD</code> 
+这一步将会使用 <code>pacman</code> 自动解决依赖，并且自动编译成相应的软件包
+<b>注意：需要在普通用户下执行</b>
+</p>
+
+<p>
+然后使用 <code>pacman -U PACKAGENAME</code> 安装已经编译完成的包
+</p>
+<pre class="example">
+pacman -U wlroots-git.tar.gz
+</pre>
+
+<p>
+其中可能有很多依赖需要解决，不过问题不大
+我为了省事，直接安装了提供的包 <code>sway</code>
+然后单独卸载了 <code>sway</code> 和 <code>wlc</code>
+然后装 <code>wlroots-git</code>
+最后装了 <code>sway</code> （依赖于 <code>wlroots-git</code> 提供的库）
+</p>
+</div>
+</li>
+<li><a id="org8797577"></a>安装tty和其它配置<br />
+<div class="outline-text-3" id="text-3-2">
+<p>
+此时切到普通用户，直接运行 <code>sway</code> 应该可以直接启动了
+</p>
+
+<p>
+进去之后发现乱码，安装字体解决
+</p>
+<pre class="example">
+# 暂时不考虑中文
+pacman -S adobe-source-code-pro-fonts
+</pre>
+<p>
+然后，终端模拟器是必须的，在这里我选了 <code>alacritty</code>
+</p>
+<pre class="example">
+# 没有选择 urxvt，因为我想试用 rust，之前在 alacritty 的项目
+# 里面发现了关于 wayland 的 issue，看它的支持实际应该很不错
+# 当然了，没有测试，如果不放心还是选 urxvt
+pacman -S alacritty
+</pre>
+<p>
+<b>切记要更改sway的配置，将终端模拟器改为alacritty</b>
+</p>
+
+<p>
+然后可以选择安装 <code>dmenu</code> 和 <code>zsh</code>
+</p>
+<pre class="example">
+pacman -S dmenu zsh
+</pre>
+<p>
+由于编译安装 <code>wlroots</code> <code>sway</code> 的原因，已经装好 <code>python3</code> 和 <code>rust</code>
+可以开心的玩耍了
+</p>
+</div>
+</li>
+<li><a id="org2586c7c"></a>后记<br />
+<div class="outline-text-3" id="text-3-3">
+<p>
+这只是最最基础的环境，尚未测试浏览器和编辑器的功能，没有设置壁纸和其它特效
+</p>
+
+<p>
+然后存在一个问题： <code>dmenu</code> 的启动菜单在屏幕之外…
+改用rofi可以完美解决dmenu的问题，而且可以进行相应的说明
+</p>
+
+<p>
+基础的命令环境应该没有什么问题：  <code>exa</code> + <code>bat</code> + <code>ripgrep</code> 等等
+</p>
+
+<p>
+参考链接：<a href="https://drewdevault.com/2019/03/11/Sway-1.0-released.html">https://drewdevault.com/2019/03/11/Sway-1.0-released.html</a>
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="org92640c4"></a>配置时间<br />
+<div class="outline-text-4" id="text-3-3-1">
+<pre class="example">
+# 将系统时间写入BIOS（--systohc)
+hwclock --systohc --localtime
+</pre>
+</div>
+</li>
+<li><a id="org7dccd40"></a>声音<br />
+<div class="outline-text-4" id="text-3-3-2">
+<p>
+使用speaker测试发现default的声卡无问题，但是apaly无法播放音频
+</p>
+
+<p>
+原因为默认声卡选择错误，将下列内容追加至/etc/asound.conf
+</p>
+<pre class="example">
+pcm.!default {
+             type hw
+             card 1
+}
+
+ctl.!default {
+             type hw
+             card 0
+}
+</pre>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div id="outline-container-org37794c1" class="outline-2">
+<h2 id="org37794c1"><span class="section-number-2">4</span> 基本开发环境搭建</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+我们的主要目的是开发 <code>Python</code> 和 <code>Rust</code>
+其次是学习 <code>Arch</code> 和其它桌面环境
+在配置整个开发环境之前，我们需要先将整个环境变得尽可能好用
+</p>
+
+<p>
+首先卸载 <code>dmenu</code> ，换用 <code>rofi</code> ，并对其进行配置
+</p>
+<pre class="example">
+set $menu rofi_path | rofi -show run | xargs swaymsg exec
+</pre>
+
+<p>
+安装 <code>Emacs</code> <code>Firefox</code> 
+</p>
+
+<p>
+配置 <code>Firefox</code> 插件 <code>Surfingkeys</code>
+</p>
+
+<p>
+如此基本的工作环境已经搭建完成
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="org187e566"></a>安装 <code>MySQL</code> 数据库<br />
+<div class="outline-text-3" id="text-4-1">
+<p>
+在 <code>Arch/Linux</code> 中，安装 ~Mariadb
+</p>
+<pre class="example">
+直接安装相应的软件包
+pacman -S mysql
+
+然后执行如下命令：
+mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+
+然后先启动 MySQL
+# systemctl start mariadb
+
+先配置相应的 root 密码
+'/usr/bin/mysqladmin' -u root password 'new-password' 
+'/usr/bin/mysqladmin' -u root -h lantian password 'new-password'  
+Alternatively you can run: '/usr/bin/mysql_secure_installation'
+
+然后启动 MariaDB，按 wiki 步骤执行即可
+# mysql_secure_installation
+# systemctl restart mariadb
+
+在Mac或Linux上，需要编辑MySQL的配置文件，把数据库默认的编码全部改为UTF-8。MySQL的配置文件默认存放在/etc/my.cnf或者/etc/mysql/my.cnf：
+
+[client]
+default-character-set = utf8
+
+[mysqld]
+default-storage-engine = INNODB
+character-set-server = utf8
+collation-server = utf8_general_ci
+</pre>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org2cd5835" class="outline-2">
+<h2 id="org2cd5835"><span class="section-number-2">5</span> 问题汇总</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+在整个Arch的安装过程中，我遇到了诸多问题
+以下一一记录
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="org05be878"></a>安装过程中无法连接wifi<br />
+<div class="outline-text-3" id="text-5-1">
+<div class="org-src-container">
+<pre class="src src-shell">wifi-menu
+dhcpcd
+</pre>
+</div>
+<p>
+第一个命令打开menu菜单，连接wifi
+第二个命令进行dhcp，自动获取ip地址
+</p>
+</div>
+</li>
+<li><a id="org751cdd2"></a>安装grub时报错<br />
+<div class="outline-text-3" id="text-5-2">
+<pre class="example">
+1 # grub-install /dev/sda
+2 /usr/sbin/grub-setup: warn: This GPT partition label has no BIOS Boot Partition; embedding won't be possible!.
+3 /usr/sbin/grub-setup: warn: Embedding is not possible.  GRUB can only be installed in this setup by using blocklists.  However, blocklists are UNRELIABLE and their use is discouraged..
+4 /usr/sbin/grub-setup: error: will not proceed with blocklists.
+</pre>
+<p>
+如上报错中有两条warn，一条error；warn可以忽略，对于此error，使用&#x2013;force强制执行即可！
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">grub-install /dev/sda --force
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org869b90f"></a>安装 yong 输入法出错<br />
+<div class="outline-text-3" id="text-5-3">
+<pre class="example">
+Cannot load module /usr/lib/gtk-2.0/2.10.0/immodules/im-yong.so: /usr/lib/gtk-2.0/2.10.0/immodules/im-yong.so: wrong ELF class: ELFCLASS32
+/usr/lib/gtk-2.0/2.10.0/immodules/im-yong.so does not export GTK+ IM module API: /usr/lib/gtk-2.0/2.10.0/immodules/im-yong.so: wrong ELF class: ELFCLASS32
+Cannot load module /usr/lib/gtk-3.0/3.0.0/immodules/im-yong.so: /usr/lib/gtk-3.0/3.0.0/immodules/im-yong.so: wrong ELF class: ELFCLASS32
+/usr/lib/gtk-3.0/3.0.0/immodules/im-yong.so does not export GTK+ IM module API: /usr/lib/gtk-3.0/3.0.0/immodules/im-yong.so: wrong ELF class: ELFCLASS32 
+</pre>
+<p>
+由于系统环境为纯64位所致，此错误不影响输入法使用
+</p>
+</div>
+</li>
+<li><a id="orgdf0ebda"></a>安装Grub引导报错<br />
+<div class="outline-text-3" id="text-5-4">
+<p>
+grub-install &#x2013;target=x86<sub>64</sub>-efi &#x2013;efi-directory=esp &#x2013;bootloader-id=GRUB
+</p>
+<pre class="example">
+warn: This GPT partition label has no BIOS Boot Partition; embedding won't be possible!.
+warn: Embedding is not possible.  GRUB can only be installed in this setup by using blocklists.  However, blocklists are UNRELIABLE and their use is discouraged..
+error: will not proceed with blocklists.
+</pre>
+<p>
+解决方案：根据字面意思，可以强制写入blocklist；
+grub-install &#x2013;target=x86<sub>64</sub>-efi &#x2013;efi-directory=esp &#x2013;bootloader-id=GRUB &#x2013;force
+</p>
+</div>
+</li>
+<li><a id="org0fbb11a"></a>虚机下无法shh到远程服务器<br />
+<div class="outline-text-3" id="text-5-5">
+<p>
+报错信息为：
+packet<sub>write</sub><sub>wait</sub>: Connection to 118.24.23.137 port 22: Broken pipe
+</p>
+
+<p>
+根因为：VMware NAT 网络模式导致
+</p>
+
+<p>
+解决方法为：手动指定 ssh 参数 -o 'IPQoS=lowdelay throughput'
+</p>
+
+<p>
+参考链接：<a href="https://lvii.github.io/system/2018-08-31-openssh-7.8p1-broken-pipe-under-vmware-vm-with-nat-port-forward/">https://lvii.github.io/system/2018-08-31-openssh-7.8p1-broken-pipe-under-vmware-vm-with-nat-port-forward/</a>
+</p>
+</div>
+</li>
+<li><a id="org7ecbca9"></a>无声音与麦克风<br />
+<div class="outline-text-3" id="text-5-6">
+<p>
+archlinux的linux内核基本适配了相当的硬件，但是可能选择错了主要设备
+</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: lantian</p>
+<p class="date">Created: 2019-07-08 Mon 00:44</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

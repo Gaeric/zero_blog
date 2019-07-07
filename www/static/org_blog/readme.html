@@ -1,12 +1,9 @@
-{% extends '__base__.html' %}
-
-{% block content %}
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-06-27 Thu 23:00 -->
+<!-- 2019-07-08 Mon 00:31 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>个人博客</title>
@@ -196,6 +193,7 @@
   /*]]>*/-->
 </style>
 <link href="./worg.css" rel="stylesheet" type="text/css">
+<link href="/static/css/worg.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -250,11 +248,13 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgb350de7">1. 要求</a></li>
-<li><a href="#org47c069b">2. journal</a></li>
-<li><a href="#org0d9521d">3. 学习笔记</a>
+<li><a href="#org2cf5b54">1. 要求</a></li>
+<li><a href="#orgc0606d6">2. journal</a></li>
+<li><a href="#org0d88332">3. 学习笔记</a>
 <ul>
-<li><a href="#org14ed9f1">3.1. ORM及metaclass用法</a></li>
+<li><a href="#org9c9d856">3.1. ORM及metaclass用法</a></li>
+<li><a href="#org3e40cb2">3.2. {}用于匹配指定次数时，中间一定不能带上空格</a></li>
+<li><a href="#org1015b95">3.3. 数据库记陆的密码与登录</a></li>
 </ul>
 </li>
 </ul>
@@ -263,8 +263,8 @@ for the JavaScript code in this tag.
 <p>
 学习python，搭建个人博客作为实战项目
 </p>
-<div id="outline-container-orgb350de7" class="outline-2">
-<h2 id="orgb350de7"><span class="section-number-2">1</span> 要求</h2>
+<div id="outline-container-org2cf5b54" class="outline-2">
+<h2 id="org2cf5b54"><span class="section-number-2">1</span> 要求</h2>
 <div class="outline-text-2" id="text-1">
 <ol class="org-ol">
 <li>依据廖雪峰的python3教程，完成功能</li>
@@ -273,8 +273,8 @@ for the JavaScript code in this tag.
 </ol>
 </div>
 </div>
-<div id="outline-container-org47c069b" class="outline-2">
-<h2 id="org47c069b"><span class="section-number-2">2</span> journal</h2>
+<div id="outline-container-orgc0606d6" class="outline-2">
+<h2 id="orgc0606d6"><span class="section-number-2">2</span> journal</h2>
 <div class="outline-text-2" id="text-2">
 <ol class="org-ol">
 <li>尽量使编码自解释：通过命名传达出数据的意图</li>
@@ -283,12 +283,12 @@ for the JavaScript code in this tag.
 </ol>
 </div>
 </div>
-<div id="outline-container-org0d9521d" class="outline-2">
-<h2 id="org0d9521d"><span class="section-number-2">3</span> 学习笔记</h2>
+<div id="outline-container-org0d88332" class="outline-2">
+<h2 id="org0d88332"><span class="section-number-2">3</span> 学习笔记</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-org14ed9f1" class="outline-3">
-<h3 id="org14ed9f1"><span class="section-number-3">3.1</span> ORM及metaclass用法</h3>
+<div id="outline-container-org9c9d856" class="outline-3">
+<h3 id="org9c9d856"><span class="section-number-3">3.1</span> ORM及metaclass用法</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 Orm作用只是对象-关系映射，把关系数据库的一张表映射为一个类，一行映射为一个对象
@@ -318,13 +318,47 @@ metaclass用于增强类的功能，通过自定义创建类的方法_<sub>new</
 </p>
 </div>
 </div>
+<div id="outline-container-org3e40cb2" class="outline-3">
+<h3 id="org3e40cb2"><span class="section-number-3">3.2</span> {}用于匹配指定次数时，中间一定不能带上空格</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+email的正则表达式：
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #dcaeea;">email_regex</span> = re.<span style="color: #c678dd;">compile</span><span style="color: #51afef;">(</span>r<span style="color: #98be65;">'''(</span>
+<span style="color: #98be65;">^</span>
+<span style="color: #98be65;">([a-zA-Z0-9._%+_]+) # username</span>
+<span style="color: #98be65;">(@)                 # symbol</span>
+<span style="color: #98be65;">([a-zA-Z0-9-.]+)    # domain name</span>
+<span style="color: #98be65;">(\.[a-zA-Z]{2,4})    # &#19981;&#33021;&#24102;&#31354;&#26684; &#20999;&#35760;</span>
+<span style="color: #98be65;">$</span>
+<span style="color: #98be65;">)</span>
+<span style="color: #98be65;">'''</span>, re.VERBOSE<span style="color: #51afef;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org1015b95" class="outline-3">
+<h3 id="org1015b95"><span class="section-number-3">3.3</span> 数据库记陆的密码与登录</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+首先，后端拿到的初始密码即已经通过前端进行摘要，数据在由客户端传递至服务端时，用户密码已经经过了sha1摘要
+</p>
+
+<p>
+服务端获取到用户注册时传递的passwd后，拼接用户 <code>uid</code> <code>:</code> <code>passwd</code> ，再次进行摘要，将摘要结果计入数据库中
+</p>
+
+<p>
+用户登陆时，服务端接收到用户传递的passwd，查找用户，取出uid，再次拼接为 <code>uid</code> <code>:</code> <code>passwd</code> ，进行摘要后与数据库密钥相比对，相同即登陆完成
+</p>
+</div>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2019-06-27 Thu 23:00</p>
+<p class="date">Created: 2019-07-08 Mon 00:31</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
 </html>
-
-{% endblock %}
