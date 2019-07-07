@@ -14,7 +14,7 @@ create table users (
   `passwd` varchar(50) not null,
   `admin` bool not null,
   `name` varchar(50) not null,
-  `image` varchar(50 ) not null,
+  `image` varchar(50) not null,
   `create_at` real not null,
   unique key `idx_eamil` (`email`),
   key `idx_create_at` (`create_at`),

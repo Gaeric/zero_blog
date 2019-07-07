@@ -48,7 +48,7 @@ def get_named_kw_args(fn):
     params = inspect.signature(fn).parameters
     for name, param in params.items():
         if param.kind == inspect.Parameter.KEYWORD_ONLY:
-            args.apped(name)
+            args.append(name)
     return tuple(args)
 
 def has_named_kw_arg(fn):
@@ -84,7 +84,7 @@ class RequestHandler(object):
         self._has_request_arg = has_request_arg(fn)
         self._has_var_kw_arg = has_var_kw_arg(fn)
         self._has_named_kw_args = has_named_kw_arg(fn)
-        self._name_kw_args = get_named_kw_args(fn)
+        self._named_kw_args = get_named_kw_args(fn)
         self._required_kw_args = get_required_kw_args(fn)
 
     async def __call__(self, request):
@@ -95,7 +95,7 @@ class RequestHandler(object):
                 if not request.content_type:
                     return web.HTTPBadRequest('Missing Content-Type.')
                 ct = request.content_type.lower()
-                if ct.startwith('application/json'):
+                if ct.startswith('application/json'):
                     params = await request.json()
                     if not isinstance(params, dict):
                         return web.HTTPBadRequest('JSON body must be object.')
@@ -114,7 +114,7 @@ class RequestHandler(object):
         if  kw is None:
             kw = dict(**request.match_info)
         else:
-            if not self._has_var_kw_arg and self._name_kw_args:
+            if not self._has_var_kw_arg and self._named_kw_args:
                 # remove all unamed kw:
                 copy = dict()
                 for name in self._named_kw_args:
@@ -139,7 +139,7 @@ class RequestHandler(object):
             r = await self._func(**kw)
             return r
         except APIError as err:
-            return dict(error=err.error, data=er.data, message=err.message)
+            return dict(error=err.error, data=err.data, message=err.message)
 
 
 def add_static(app):
