@@ -6,7 +6,7 @@ create database zero_blog;
 
 use zero_blog;
 
-grant insert, delete, update, select on zero_blog.* to 'www-data'@'localhost' identified by 'www-data';
+grant insert, delete, update, select on zero_blog.* to 'zero_blog'@'localhost' identified by 'zero_blog';
 
 create table users (
   `id` varchar(50) not null,
